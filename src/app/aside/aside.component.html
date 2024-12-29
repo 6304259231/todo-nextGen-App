@@ -1,0 +1,17 @@
+<section class="border border-1" style="height : 90vh;" id="aside-section">
+    <div>
+        <a routerLink="/">
+            <p> Dashboard</p>
+        </a>
+    </div>
+    <div>
+         <a routerLink="/completed">
+            <p (click)="changeStatus('Completed')"> Completed</p>
+         </a>
+    </div>
+    <div>
+       <a routerLink="/pending">
+        <p (click)="changeStatus('Active')"> pending</p>
+       </a>
+    </div>
+</section>

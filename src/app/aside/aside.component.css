@@ -1,0 +1,21 @@
+#aside-section{
+    background: rgb(177, 166, 166);
+    padding: 1rem;
+}
+#aside-section a{
+    text-decoration: none;
+}
+#aside-section a p {
+    font-size: large;
+    color: black;
+    padding: 0.5rem;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+}
+
+#aside-section a p:hover{
+    color: rgb(242, 236, 227);
+    background: green;
+    border-radius: 12px;
+    opacity: 60%;
+}

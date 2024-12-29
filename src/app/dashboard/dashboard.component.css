@@ -1,0 +1,28 @@
+/* Set the background color of the table to white */
+.mat-elevation-z8 {
+    background-color: white !important;  /* Ensure this rule is applied */
+  }
+
+  .mdc-text-field--filled {
+    width: 40vw !important;
+}
+  /* If you want to adjust the row background color as well */
+  .mat-row {
+    background-color: white !important;
+  }
+  
+  /* Optional: Change the header row background color */
+  .mat-header-row {
+    background-color: #f5f5f5; /* Light gray for header */
+  }
+  
+  /* Optional: Change the table cell text color if needed */
+  .mat-cell, .mat-header-cell {
+    color: black; /* Set text color to black */
+  }
+  
+  /* Optional: Change paginator background if you want to control it */
+  .mat-paginator {
+    background-color: white !important; /* Make sure paginator has a white background */
+  }
+  
