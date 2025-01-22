@@ -116,4 +116,13 @@ export class TodoService {
     );
   }
 
+  deleteCurrentUser(userId : any) : Observable<any> {
+    this.isLoadingDataSubject.next(true);
+    return this.http.delete(`${this.apiURI}/deleteUser/${userId}`).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
+  }
+
 }

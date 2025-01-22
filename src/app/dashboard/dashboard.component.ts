@@ -65,12 +65,11 @@ export class DashboardComponent {
         },
       });
     } else {
-      // this.toastr.warning("Please regsiter to this application to unlock !" , "Warning")
       this.router.navigateByUrl('/login');
+      // this.toastr.error("Please regsiter to this application to unlock !" , "Warning");
     }
   }
   
-
   // Data for the table
   displayedColumns: string[] = ['id', 'title', 'date', 'status', 'actions'];
 

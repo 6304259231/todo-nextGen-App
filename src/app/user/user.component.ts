@@ -58,4 +58,22 @@ export class UserComponent implements OnInit {
     this.router.navigateByUrl('/login')
     this.toastr.success("Logged out succsessfully !" , "Success")
   }
+
+  deleteUser() : void{
+    if(this.currentUserId){
+      this.todoService.deleteCurrentUser(this.currentUserId).subscribe({
+        next: (data) => {
+          if (data) {
+            this.toastr.success("User deleted Successfully" , "Success");
+            this.router.navigateByUrl("/login");
+          }
+        },
+        error: (error) => {
+          if (error) {
+            this.toastr.warning('Server Error! from user', 'Warning');
+          }
+        }
+      });
+    }
+  }
 }
