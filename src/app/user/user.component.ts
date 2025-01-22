@@ -65,6 +65,7 @@ export class UserComponent implements OnInit {
         next: (data) => {
           if (data) {
             this.toastr.success("User deleted Successfully" , "Success");
+            this.todoService.removeCurrentUserIdFromStorage()
             this.router.navigateByUrl("/login");
           }
         },
