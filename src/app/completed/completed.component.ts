@@ -31,7 +31,7 @@ export class CompletedComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router, private toast: ToastrService) {  }
+  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router, private toastr: ToastrService) {  }
 
   ngOnInit() {
     this.userId = this.todoService.getCurrentUserIdFromStorage();
