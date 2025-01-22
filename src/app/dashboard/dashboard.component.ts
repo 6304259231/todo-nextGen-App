@@ -65,7 +65,7 @@ export class DashboardComponent {
         },
       });
     } else {
-      this.toastr.warning("Please regsiter / Login to this App to unlock more faeutures" , "Warning")
+      // this.toastr.warning("Please regsiter to this application to unlock !" , "Warning")
       this.router.navigateByUrl('/login');
     }
   }
