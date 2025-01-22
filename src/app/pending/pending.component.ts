@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { SpinnerComponent } from '../util/spinner/spinner.component';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class PendingComponent {
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router) {
+  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router, private toastr : ToastrService) {
   }
 
   ngOnInit() {
@@ -44,6 +45,7 @@ export class PendingComponent {
       });
       this.fetchPendingTodos();
     }else {
+      this.toastr.warning("Please regsiter / Login to this App to unlock more faeutures" , "Warning");
       this.router.navigateByUrl('/login');
     }
   }

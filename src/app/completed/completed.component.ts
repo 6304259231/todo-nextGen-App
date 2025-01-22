@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { SpinnerComponent } from '../util/spinner/spinner.component';
 import { Router } from '@angular/router';
-
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-completed',
@@ -31,7 +31,7 @@ export class CompletedComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router) {  }
+  constructor(private todoService: TodoService, private _liveAnnouncer: LiveAnnouncer, private router : Router, private toast: ToastrService) {  }
 
   ngOnInit() {
     this.userId = this.todoService.getCurrentUserIdFromStorage();
@@ -42,6 +42,7 @@ export class CompletedComponent implements AfterViewInit {
       });
       this.fetchCompletedTodos();
     }else {
+      this.toastr.warning("Please regsiter / Login to this App to unlock more faeutures" , "Warning")
       this.router.navigateByUrl('/login');
     }
   }
