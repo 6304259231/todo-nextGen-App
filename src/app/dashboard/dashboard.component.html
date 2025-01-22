@@ -1,80 +1,100 @@
-<section class="">
-  <form style="display: flex; gap: 2rem; align-items: center; width: 100%;">
-    <mat-form-field class="example-full-width" style="width: 50%;">
-      <mat-label>Add Todo </mat-label>
-      <input matInput placeholder="Add Todo here..." [(ngModel)]="todoInput" name="todoInput">
-    </mat-form-field>
-    <button type="button" class="btn btn-outline-success" (click)="addTodo()" [disabled]="!todoInput">Add</button>
+<section style="padding-right: 2.5rem;">
+  <form style="display: flex; align-items: center; width: 100%; justify-content: space-around;">
+    <div style="display: flex; gap: 12px; align-items: center; width: 100%;">
+      <mat-form-field class="example-full-width" style="width: 50%;">
+        <mat-label>Add Todo </mat-label>
+        <input matInput placeholder="Add Todo here..." [(ngModel)]="todoInput" name="todoInput">
+      </mat-form-field>
+      <button type="button" class="btn btn-outline-success" (click)="addTodo()" [disabled]="!todoInput">Add</button>
+    </div>
+    <div class="ml-4" style="width: 35%;">
+      <input class="form-control" type="search" placeholder="Search Todos" aria-label="Search" name="searchedInput" [(ngModel)]="searchedInput" (input)="filterTodo()">
+    </div>
   </form>
 
-  <ng-container *ngIf="todoList.length > 0; else noData">
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource">
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>No.</th>
-          <td mat-cell *matCellDef="let element">{{element.id}}</td>
-        </ng-container>
+  @if(!isDataLoadingByApi) {
+  @if(todoList.length === 0){
+  <p style="text-align: center; font-size: x-large; color: tomato;">No data Found ⚠️ <br> ! Please add your Tasks to Todo
+  </p>
+  }
+  @if(noResultsFound){
+    <p style="text-align: center; font-size: x-large; color: tomato;"> ⚠️ No data Found for your search "<i class="ml-2 mr-2">{{searchedInput}}</i>"</p>
+  }
+  @else {
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+        <td mat-cell *matCellDef="let todo" class="todo-id"> {{todo._id | slice : -3}} </td>
+      </ng-container>
 
-        <!-- Title Column -->
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef>Title</th>
-          <td mat-cell *matCellDef="let element">{{element.title}}</td>
-        </ng-container>
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+        <td mat-cell *matCellDef="let todo" [ngClass]="{'completed-todo' : todo.status == 'Completed'}"
+          class="todo-title"> {{todo.title}} </td>
+      </ng-container>
 
-        <!-- Date Column -->
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let element">{{element.date | date}}</td>
-        </ng-container>
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+        <td class='todo-date' mat-cell *matCellDef="let todo"> {{todo.date | date }} </td>
+      </ng-container>
 
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let element">{{element.status}}</td>
-        </ng-container>
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <td mat-cell *matCellDef="let todo"
+          [ngClass]="todo.status === 'Completed' ? 'completed-todo-status' : 'active-todo-status'"> {{todo.status}}
+        </td>
+      </ng-container>
 
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let element; let i = index">
-            <button (click)="callEditTodo(i)" class="bg-transparent text-secondary border-none" style="border : none">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-pencil-square" viewBox="0 0 16 16">
-                <path
-                  d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                <path fill-rule="evenodd"
-                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-              </svg>
-            </button>
-            <button (click)="removeTodo(i)" class="bg-transparent text-danger border-none" style="border : none">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3"
-                viewBox="0 0 16 16">
-                <path
-                  d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-              </svg>
-            </button>
-            <button (click)="markCompleted(i)" class="btn btn-outline-warning" style="margin-left: 12px;">Mark
-              Completed</button>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element;">
+          <button (click)="callEditTodo(element._id , element.title)" class="bg-transparent text-secondary border-none"
+            style="border : none" *ngIf="element.status !== 'Completed'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+              <path fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+            </svg>
+          </button>
+          <button (click)="removeTodo(element._id)" class="bg-transparent text-danger border-none"
+            style="border : none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3"
+              viewBox="0 0 16 16">
+              <path
+                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+            </svg>
+          </button>
+          <button *ngIf="element.status !== 'Completed'" (click)="markAsCompleted(element._id)"
+            class="btn btn-outline-warning" style="margin-left: 12px;">Mark as
+            Completed</button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  }
 
-        <!-- Table Header and Body -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
-  </ng-container>
-  <ng-template #noData>
-    <p style="text-align: center; font-size: xx-large; color: tomato;">No data Found ⚠️</p>
-  </ng-template>
-
-   <!-- MatPaginator -->
-   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of todos">
+  @if(todoList.length > 0){
+  <!-- MatPaginator -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of todos">
   </mat-paginator>
+  }
+  }
+  @else {
+  <app-spinner></app-spinner>
+  }
 
   <!-- Edit Modal -->
-  <div class="modal" *ngIf="showEditBar"
+  @if(showEditBar){
+  <div class="modal"
     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
     <div class="modal-content"
       style="background: #fff; padding: 2rem; border-radius: 8px; width: 50%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center;">
@@ -87,4 +107,5 @@
       </div>
     </div>
   </div>
+  }
 </section>

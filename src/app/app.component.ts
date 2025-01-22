@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavComponent } from './nav/nav.component';
 import { WrapperComponent } from './wrapper/wrapper.component';
 
+
+
 @Component({
   selector: 'app-root',
   imports: [NavComponent, WrapperComponent],

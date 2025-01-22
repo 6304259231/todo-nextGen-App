@@ -1,0 +1,45 @@
+<form class="example-form" [formGroup]="login" style="margin-right: 2rem;">
+        <div style="width: 75%;">
+            <mat-form-field class="example-full-width custom-width-login">
+                <mat-label>email</mat-label>
+                <input matInput type="email" name="email" formControlName="email">
+            </mat-form-field>
+
+            <!-- validation starts -->
+            <div *ngIf="login.get('email')?.invalid && login.get('email')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="login?.get('email')?.hasError('required')" class="text-sm text-danger">email is
+                    required.</small>
+                <small *ngIf="login?.get('email')?.hasError('email')" class="text-small text-danger">Please enter
+                    valid email</small>
+            </div>
+            <!-- validation ends -->
+        </div>
+        
+        <div style="width: 75%;">
+            <mat-form-field class="example-full-width custom-width-login">
+                <mat-label>Enter your password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'"  name="password" formControlName="password" />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  (click)="clickEvent($event)"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide()"
+                  class="password-hide-btn"
+                >
+                  <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            <!-- validation starts -->
+            <div *ngIf="login.get('password')?.invalid && login.get('password')?.dirty" class="text-danger mt-2 validation-error-section d-flex flex-column">
+                <small *ngIf="login.get('password')?.hasError('required')">Password is required.</small>
+            </div>
+            <!-- validation ends -->
+        </div>
+        <div>
+            <button type="submit" 
+            class="btn btn-outline-success" 
+            (click)="loginCheck()"
+           >Login</button>
+        </div>
+</form>

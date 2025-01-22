@@ -1,62 +1,119 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 
+
 export class TodoService {
-  todoList: any[] = [
-    {
-      id     : 1,
-      title  : "Have to go to Gym tonight",
-      date   : new Date(),
-      status : "Active"
-    },
-  ]
-  private lastId = 2;
-  status : string = "All";
+
+  constructor(private http: HttpClient ) {}
+ 
+  private apiURI = "https://todo-nextgen-server-2.onrender.com";
+  todoList: any[] = [];
+  authStatusSubject = new BehaviorSubject<boolean>(this.checkUserAuth());
+
+  isLoadingDataSubject = new BehaviorSubject<boolean>(false); 
+ 
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
+  checkUserAuth() : boolean {
+    if(this.isBrowser()){
+      let isUserAuth = localStorage.getItem('isUserAuth');
+      return isUserAuth === 'true';
+    }
+    return false;
+  }
+
+
+  getCurrentUserIdFromStorage(): string | null {
+    // Ensure code runs only in browser context
+    if (typeof window !== 'undefined' && localStorage) {       
+      return localStorage.getItem("currentUserId");
+    }
+    return null;
+  }
   
-
-  constructor() { }
-  addTodoInService(todo: string): void {
-    console.log(this.todoList)
-    // console.log(todo)
-    this.todoList.push({
-      id    : this.lastId++,
-      title : todo,
-      date  : new Date(),
-      status : "Active"
-    });
+  removeCurrentUserIdFromStorage(): void {
+    // Ensure code runs only in browser context
+    if (typeof window !== 'undefined' && localStorage) {       
+      localStorage.removeItem("currentUserId");
+      localStorage.removeItem('isUserAuth');
+    }
+    this.authStatusSubject.next(false);  // Reset authentication status
+  }
+  
+  setCurrentUserIdInStorage(userId: string): void {
+    if (typeof window !== 'undefined' && localStorage) {       
+      localStorage.setItem('currentUserId', userId);
+      localStorage.setItem('isUserAuth', 'true');
+      this.authStatusSubject.next(true);   // Update authentication status
+    }
+    
   }
 
-  removeTodoInService(index: number): void {
-    this.todoList.splice(index, 1);
+  registerNewUser(userDetails : any): Observable<any>{
+    return this.http.post(`${this.apiURI}/register`, userDetails)
   }
 
-  editTodoInService(i: number, editedInput: string) {
-    this.todoList[i].title = editedInput;
-    this.todoList[i].date = new Date();
+  
+  loginUser(userDetails : any): Observable<any>{
+    return this.http.post(`${this.apiURI}/login`, userDetails)
   }
 
-  markAsCompleteInService(i:number): void {
-    this.todoList[i].status = "Completed"
+  getCurrentUser(currentUserId : any): Observable<any> {
+    return this.http.get(`${this.apiURI}/get-current-user/${currentUserId}`)
   }
 
-  changeStatusInService(status : string): void{
-    this.status  = status;
-    console.log(this.status);
+  addTodoApi(userId : any, todo: any): Observable<any> {
+   return this.http.post(`${this.apiURI}/post-todo/${userId}`, { "title" : todo})
   }
 
-  getAllTodos(): any[]{
-    return this.todoList;
+  removeTodoApi( userId: string, todoId: string):  Observable<any> {
+    return this.http.delete(`${this.apiURI}/delete-todo/${userId}/${todoId}`,)
   }
 
-  getCompletedTodos(): any[] {
-    return this.todoList.filter(todo => todo.status === "Completed");
+  editTodoApi( userId : any, editIndex : any, editedInput: string) : Observable<any> {
+    return this.http.put(`${this.apiURI}/edit-todo/${userId}/${editIndex}`, { title : editedInput})
   }
 
-  getPendingTodos(): any[] {
-    return this.todoList.filter(todo => todo.status === "Active");
+  markAsCompleted( userId : any, todoId : any ): Observable<any>  {
+    return this.http.put(`${this.apiURI}/edit-todo/${userId}/${todoId}/Completed`, { status : "Completed"})
+  }
+
+  getAllTodos(userId: any): Observable<any> {
+    this.isLoadingDataSubject.next(true);
+    return this.http.get(`${this.apiURI}/get-todos/${userId}`).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
+  }
+  
+  getCompletedTodos(userId: any): Observable<any> {
+    this.isLoadingDataSubject.next(true);
+    return this.http.get(`${this.apiURI}/todos/completed/${userId}`).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
+  }
+  
+  getPendingTodos(userId: any): Observable<any> {
+    this.isLoadingDataSubject.next(true);
+    return this.http.get(`${this.apiURI}/todos/pending/${userId}`).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
   }
 
 }

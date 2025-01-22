@@ -1,6 +1,7 @@
 #aside-section{
     background: rgb(177, 166, 166);
     padding: 1rem;
+    position: fixed;
 }
 #aside-section a{
     text-decoration: none;

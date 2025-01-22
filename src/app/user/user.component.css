@@ -1,0 +1,60 @@
+/* Card container */
+.user-profile {
+    width: 60%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    background-color: #fff;
+  }
+  
+  /* Profile Header */
+  .profile-header {
+    padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .profile-img {
+    border-radius: 50%;
+    border: 3px solid tomato;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-name {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    margin-top: 10px;
+    font-size: 24px;
+    color: #343a40;
+  }
+  
+  .profile-email {
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+    color: #6c757d;
+  }
+  
+  /* Profile Body */
+  .profile-body {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .profile-address,
+  .profile-city,
+  .profile-dob {
+    font-family: 'Rubik', sans-serif;
+    font-size: 16px;
+    color: #343a40;
+    margin: 5px 0;
+  }
+  
+  .profile-footer {
+    margin-top: 20px;
+  }
+  
+  title-user{
+    font-family: monospace; 
+    font-size: large
+  }

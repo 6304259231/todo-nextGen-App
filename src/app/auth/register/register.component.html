@@ -1,0 +1,176 @@
+<form class="example-form" [formGroup]="register" style="margin-right: 2rem;">
+    <div style="display: flex; gap: 0.5rem;">
+        <div style="width: 100%;">
+            <mat-form-field class="example-full-width custom-width">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="" name="firstName" formControlName="firstName">
+            </mat-form-field>
+            <!-- validation starts -->
+            <div *ngIf="register.get('firstName')?.invalid && register.get('firstName')?.dirty"
+                class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('firstName')?.hasError('required')" class="text-sm text-danger">First name is
+                required.</small>
+                <small *ngIf="register?.get('firstName')?.hasError('minlength')" class="text-small text-danger">Please
+                    enter
+                    min. 4 letters</small>
+            </div>
+            <!-- validation ends -->
+        </div>
+
+        <div style="width: 100%;">
+            <mat-form-field class="example-full-width custom-width">
+                <mat-label>Last Name</mat-label>
+                <input matInput name="lastName" formControlName="lastName">
+            </mat-form-field>
+            <!-- validation starts -->
+            <div *ngIf="register.get('lastName')?.invalid && register.get('lastName')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('lastName')?.hasError('required')" class="text-sm text-danger">Last name is
+                required.</small>
+            </div>
+            <!-- validations ends -->
+        </div>
+    </div>
+    <div style="display: flex; gap: 0.5rem; ">
+        <div style="width: 100%;">
+            <mat-form-field class="example-full-width custom-width">
+                <mat-label>email</mat-label>
+                <input matInput type="email" name="email" formControlName="email">
+            </mat-form-field>
+
+            <!-- validation starts -->
+            <div *ngIf="register.get('email')?.invalid && register.get('email')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('email')?.hasError('required')" class="text-sm text-danger">email is
+                    required.</small>
+                <small *ngIf="register?.get('email')?.hasError('email')" class="text-small text-danger">Please enter
+                    valid email</small>
+            </div>
+            <!-- validation ends -->
+        </div>
+        <div style="width: 100%;">
+            <mat-form-field class="example-full-width custom-width">
+                <mat-label>Mobile</mat-label>
+                <input matInput type="number" name="mobile" formControlName="mobile" maxlength="10" (input)="restrictTo10Digits($event)">
+            </mat-form-field>
+            <!-- validation starts -->
+            <div *ngIf="register.get('mobile')?.invalid && register.get('mobile')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('mobile')?.hasError('required')" class="text-sm text-danger">mobile is
+                    required.</small>
+                <small *ngIf="register?.get('mobile')?.hasError('minlength')" class="text-small text-danger">Please
+                    enter
+                    valid mobile</small>
+            </div>
+            <!-- validation ends -->
+        </div>
+    </div>
+    <div style="display: flex; gap: 0.5rem; ">
+        <div style="width: 100%;">
+            <mat-form-field class="custom-width">
+                <mat-label>Enter your password</mat-label>
+                <input matInput [type]="hide() ? 'password' : 'text'"  name="password" formControlName="password" />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  (click)="clickEvent($event)"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide()"
+                  class="password-hide-btn"
+                >
+                  <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            <!-- validation starts -->
+            <div *ngIf="register.get('password')?.invalid && register.get('password')?.dirty" class="text-danger mt-2 validation-error-section d-flex flex-column">
+                <small *ngIf="register.get('password')?.hasError('required')">Password is required.</small>
+                <small *ngIf="register.get('password')?.hasError('minlength')">Minimum 8 characters</small>
+
+                <!-- custom validations -->
+                <small *ngIf="register.get('password')?.hasError('noUpperCase')"> Atleast one Uppercase</small>
+                <small *ngIf="register.get('password')?.hasError('noDigit')"> Atleast one Digit</small>
+                <small *ngIf="register.get('password')?.hasError('noSpecialChar')"> Atleast one Special char
+                    (#/#/!/..etc)</small>
+            </div>
+            <!-- validation ends -->
+
+        </div>
+       <div style="width: 100%;">
+        <mat-form-field class="custom-width">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hide() ? 'password' : 'text'"  name="confirmPassword" formControlName="confirmPassword" />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="clickEvent($event)"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide()"
+              class="password-hide-btn"
+            >
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+          <!-- validation starts -->
+          <div *ngIf="register.get('confirmPassword')?.invalid && register.get('confirmPassword')?.dirty" class="text-danger mt-2 validation-error-section d-flex flex-column">
+            <small *ngIf="register.get('confirmPassword')?.hasError('required')">confirmPassword is required.</small>
+        </div>
+        <div class="validation-error-section">
+            <small *ngIf="register.errors?.['noPasswordMatch']">confirmPassword should match</small>
+        </div>
+        <!-- validation ends -->
+       </div>
+    </div>
+    <div style="display: flex; gap: 0.5rem; ">
+        <div style="width: 100%;">
+            <mat-form-field class="custom-width">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender">
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                    <mat-option value="don't Know / Others">don't Know / Others</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="register.get('gender')?.invalid && register.get('gender')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('gender')?.hasError('required')" class="text-sm text-danger">Gender is required.</small>
+            </div>
+        </div>
+        <div style="width: 100%;">
+            <mat-form-field class="custom-width">
+                <mat-label>Date Of Birth DOB</mat-label>
+                <input matInput [matDatepicker]="datepicker" formControlName="dob">
+                <mat-datepicker #datepicker />
+                <mat-datepicker-toggle [for]="datepicker" matSuffix />
+            </mat-form-field>
+            <div *ngIf="register.get('dob')?.invalid && register.get('dob')?.dirty" class="text-danger mt-2 validation-error-section">
+                <small *ngIf="register?.get('dob')?.hasError('required')" class="text-sm text-danger">Dob is required.</small>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+       <div style="width: 100%;">
+        <mat-form-field class="example-full-width custom-width">
+            <mat-label>Address</mat-label>
+            <input matInput name="address" formControlName="address">
+        </mat-form-field>
+        <div *ngIf="register.get('address')?.invalid && register.get('address')?.dirty" class="text-danger mt-2 validation-error-section">
+            <small *ngIf="register?.get('address')?.hasError('required')" class="text-sm text-danger">Address is required.</small>
+        </div>
+       </div>
+       <div style="width: 100%;">
+        <mat-form-field class="example-full-width custom-width">
+            <mat-label>City</mat-label>
+            <input matInput  name="city" formControlName="city">
+        </mat-form-field>
+        <div *ngIf="register.get('city')?.invalid && register.get('city')?.dirty" class="text-danger mt-2 validation-error-section">
+            <small *ngIf="register?.get('city')?.hasError('required')" class="text-sm text-danger">City is required.</small>
+        </div>
+       </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+        <button type="submit" 
+            class="btn btn-outline-success" 
+            (click)="registerNew()"
+           >Register</button>
+        <div class="d-flex align-items-center" style="margin-left: 1rem;">
+            <p>New user go to </p>
+            <button type="button" class="btn btn-outline-warning" style="margin-left: 0.5rem;" (click)="login()">Login</button>
+        </div>
+    </div>
+</form>

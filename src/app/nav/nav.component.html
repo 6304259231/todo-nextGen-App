@@ -1,12 +1,35 @@
-<nav class="d-flex p-2 align-items-center border bg-success border-1 w-full">
-    <div class="text-white opacity-75">
+<nav class="d-flex p-2 align-items-center border bg-success border-1 w-full justify-content-between">
+    <!-- Left Section -->
+    <div class="text-white opacity-75 d-flex align-items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-list"
             viewBox="0 0 22 22">
             <path fill-rule="evenodd"
-                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
         </svg>
+        <div class="text-white opacity-75">
+            <h1>Todo</h1>
+        </div>
     </div>
-    <div class="text-white opacity-75">
-        <h1>Todo</h1>
-    </div>
+
+        @if(!isAuthenticated){
+            <!-- When the user is not authenticated -->
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn btn-dark text-white">
+                <a routerLink="/register" class="text-decoration-none text-white">Register</a>
+            </button>
+            <button class="btn btn-warning" style="margin-left: 12px;">
+                <a routerLink="/login" class="text-decoration-none">Login</a>
+            </button>
+        </div>
+        }
+        @else {
+        <div class="d-flex align-items-center" class="bg-transparent">
+            <button routerLink="/user" class='user-logo-btn'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+            </button>
+        </div>
+    }
 </nav>

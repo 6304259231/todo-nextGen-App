@@ -1,0 +1,14 @@
+nav a{
+    text-decoration: none;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+.user-logo-btn{
+    border: none;
+    background: transparent;
+}

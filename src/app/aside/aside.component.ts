@@ -11,9 +11,6 @@ import { RouterLink } from '@angular/router';
 export class AsideComponent {
 
   constructor(private todoServices: TodoService) {
-    console.log("aside constructor");
-  }
-  changeStatus(status : string) : void{
-     this.todoServices.changeStatusInService(status);
+   
   }
 }
