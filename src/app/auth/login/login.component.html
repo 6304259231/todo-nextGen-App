@@ -4,7 +4,6 @@
                 <mat-label>Email</mat-label>
                 <input matInput type="email" name="email" formControlName="email">
             </mat-form-field>
-
             <!-- validation starts -->
             <div *ngIf="login.get('email')?.invalid && login.get('email')?.dirty" class="text-danger mt-2 validation-error-section">
                 <small *ngIf="login?.get('email')?.hasError('required')" class="text-sm text-danger">email is
@@ -40,6 +39,6 @@
             <button type="submit" 
             class="btn btn-outline-success" 
             (click)="loginCheck()"
-           >Login</button>
+           > {{ isLoadingByApi ? 'Loading...' : 'Login' }}</button>
         </div>
 </form>

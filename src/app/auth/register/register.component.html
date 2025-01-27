@@ -167,10 +167,6 @@
         <button type="submit" 
             class="btn btn-outline-success" 
             (click)="registerNew()"
-           >Register</button>
-        <div class="d-flex align-items-center" style="margin-left: 1rem;">
-            <p>New user go to </p>
-            <button type="button" class="btn btn-outline-warning" style="margin-left: 0.5rem;" (click)="login()">Login</button>
-        </div>
+           > {{ isLoadingByApi ? 'Loading...' : 'Register' }}</button>
     </div>
 </form>

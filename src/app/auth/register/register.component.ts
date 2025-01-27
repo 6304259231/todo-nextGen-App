@@ -23,7 +23,7 @@ import {MatIconModule} from '@angular/material/icon';
 export class RegisterComponent {
 
   constructor( private todoService: TodoService, private toastr:ToastrService, private router: Router){}
-
+  isLoadingByApi : boolean = false;
   hide = signal(true);
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -51,16 +51,19 @@ export class RegisterComponent {
 
 
   registerNew(): void {
+    this.isLoadingByApi = true;
     if(this.register?.valid){
       this.todoService.registerNewUser(this.register.value).subscribe({
         next : (response)=>{
           if(response){
             this.toastr.success(response?.message, 'Success');
             console.log('Registration successful', response);
-            this.router.navigateByUrl('/login')
+            this.router.navigateByUrl('/login');
+            this.isLoadingByApi = false;
           }
         },
         error : (error)=>{
+          this.isLoadingByApi = false;
           this.toastr.error('Register Failed, Please try again later', "Error")
           console.error('Registration failed', error);
         }

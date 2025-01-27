@@ -35,7 +35,6 @@ export class TodoService {
 
 
   getCurrentUserIdFromStorage(): string | null {
-    // Ensure code runs only in browser context
     if (typeof window !== 'undefined' && localStorage) {       
       return localStorage.getItem("currentUserId");
     }
@@ -43,7 +42,6 @@ export class TodoService {
   }
   
   removeCurrentUserIdFromStorage(): void {
-    // Ensure code runs only in browser context
     if (typeof window !== 'undefined' && localStorage) {       
       localStorage.removeItem("currentUserId");
       localStorage.removeItem('isUserAuth');
@@ -61,12 +59,22 @@ export class TodoService {
   }
 
   registerNewUser(userDetails : any): Observable<any>{
-    return this.http.post(`${this.apiURI}/register`, userDetails)
+    this.isLoadingDataSubject.next(true);
+    return this.http.post(`${this.apiURI}/register`, userDetails).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
   }
 
   
   loginUser(userDetails : any): Observable<any>{
-    return this.http.post(`${this.apiURI}/login`, userDetails)
+    this.isLoadingDataSubject.next(true);
+    return this.http.post(`${this.apiURI}/login`, userDetails).pipe(
+      finalize(() => {
+        this.isLoadingDataSubject.next(false)
+      })
+    );
   }
 
   getCurrentUser(currentUserId : any): Observable<any> {
